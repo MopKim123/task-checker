@@ -1,22 +1,8 @@
 <template>
     <!-- Backdrop always rendered -->
     <div class="boardpage"> 
-        <div class="board-container">
-            <div class="board-top">
-                <h2>Boards</h2>
-            </div>
-            <div v-for="board in boardStore.boards" :key="board.id" class="board-card">
-                <h3>{{ board.name }}</h3> 
-            </div> 
-        </div>
-        <div class="task-container">
-            <div class="task-top">
-
-            </div>
-            <div class="tasks">
-
-            </div>  
-        </div>
+        <BoardContainer/>
+        <TaskContainer/>
         <div class="info-container">
 
             
@@ -25,18 +11,17 @@
 </template>
 
 
-<script lang="ts" setup>
-import { onMounted } from 'vue';
-import { useBoardStore } from '../../store/boards.store'; 
-const boardStore = useBoardStore() 
+<script lang="ts" setup> 
+import BoardContainer from './child/BoardContainer.vue';
+import TaskContainer from './child/TaskContainer.vue'; 
 
-onMounted( async() => {
-    await boardStore.getBoards(Number(localStorage.getItem('userId')));
-}); 
-  
 </script>
 
 <style scoped>
+h2{
+    color: #32ba7c;
+}
+
 /* ------- BOARD ------- */
 .boardpage {  
     width: 100%;  
@@ -46,59 +31,17 @@ onMounted( async() => {
     align-items: center;    
     
 } 
-.board-container, .task-container, .info-container{
-    background-color: #242424;
-    height: 100%; 
-}
-.board-top{
-    background-color: #242424;
-    padding: 0 1vw;
-    border-bottom: 1px solid gray;
-    height: 7vh;
-    width: 90%;
-    position: sticky;
-    top: 0;
-}
-.board-top h2{
-    margin: 1vh 0;
-}
-.board-container{
-    width: 20%; 
-    display: flex;
-    flex-direction: column;
-    overflow-y: scroll;
-}
-
-.board-card {
-    padding: 1rem;
-    background-color: #242424;
-    border: 1px solid #ccc;
-    border-radius: 8px; 
-    margin: 1vh .5vw;
-    height: 4vh;
-    cursor: pointer;
-}
-.board-card:hover {
-    background-color: #373737;
-}
-.board-card h3 {
-    margin: 0;
-}
-
-
-/* ------- TASKS ------- */
-.task-container{
-    width: 60%;
-    border-left: 1px solid gray;
-    border-right: 1px solid gray;
-}
 .info-container{
-    width: 20%;
-}
+} 
+
 
 
 /* ------- INFORMATION ------- */
-
+.info-container{
+    width: 20%;
+    background-color: #242424;
+    height: 100%; 
+}
 
 
 

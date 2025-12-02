@@ -5,6 +5,7 @@ import { getAllBoards } from '../services/board'
 export const useBoardStore = defineStore('board', {
     state: () => ({
         boards: [] as BoardResponse[], 
+        current: {} as BoardResponse, 
     }),
 
     actions: {
