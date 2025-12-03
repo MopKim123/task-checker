@@ -35,6 +35,7 @@ async function selectBoard(board: BoardResponse) {
     boardStore.current = board 
     taskStore.getTasks(Number(board.id))
     boardStore.connectToBoard(board.id)
+    taskStore.initTaskEvents();
 }
 
 </script>

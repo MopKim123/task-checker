@@ -35,7 +35,7 @@ export const useTaskStore = defineStore('task', {
                     tasks.map(task => getAllComments(task.id))
                 );
                 const allComments = tasksWithComments.flat();
-                
+
                 this.setTasks(tasks)    
                 this.setMembers(members)                 
                 this.setComments(allComments)                 
@@ -46,7 +46,8 @@ export const useTaskStore = defineStore('task', {
 
         initTaskEvents() {
             onEvent("TASK_CREATED", (msg) => {
-                this.tasks.push(msg.payload);
+                console.log("msg2",msg.data)
+                this.tasks.push(msg.data);
             });
 
             onEvent("TASK_UPDATED", (msg) => {

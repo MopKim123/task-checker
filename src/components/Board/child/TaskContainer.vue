@@ -24,7 +24,7 @@
                     <img src="../../../assets/comment.png" class="icon" />
                 </div>
             </div>
-            <div class="create-task-card" @click="isCreateTaskVisible = true"> 
+            <div class="create-task-card" @click="isCreateTaskVisible = true" v-show="boardStore.current.id"> 
                 <img src="../../../assets/plus.png" class="icon" />
             </div>
         </div>
@@ -49,7 +49,7 @@ const boardStore = useBoardStore()
 const taskStore = useTaskStore() 
 
 const isCreateTaskVisible = ref(false)
-
+ 
 
 </script>
 
@@ -104,11 +104,15 @@ h2{
     align-items: center;
     justify-content: space-between;
 }
+.task-card-row h3{
+    text-align: left; 
+}
 .task-card-comment {   
     display: flex;
     flex-direction: row;
     align-items: center; 
     justify-content: right;
+    margin-top: auto;
 }
 .task-card-comment img{   
     height: 1.3vw;
@@ -152,5 +156,6 @@ h2{
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    min-height: 18vh;
 }
 </style>
