@@ -1,11 +1,11 @@
 <template>
     <!-- Backdrop always rendered --> 
-        <div class="board-container">
-            <div class="board-top">
-                <h2>Boards</h2>
+        <div class="info-container">
+            <div class="info-top">
+                <h2>Members</h2>
             </div>
-            <div v-for="board in boardStore.boards" :key="board.id" class="board-card" @click="selectBoard(board)">
-                <h5>{{ board.name }}</h5> 
+            <div v-for="member in taskStore.members" :key="member.user.id" class="member-card">
+                <h4>{{ member.user.username }}</h4> 
             </div> 
         </div>  
 </template>
@@ -27,14 +27,14 @@ onMounted( async() => {
 watch(
     () => boardStore.current.id,
     id => {
-        console.log("id",id) 
+        console.log("id",id)
+        taskStore.getTasks(Number(id))
     }
 )
 
 async function selectBoard(board: BoardResponse) {
     boardStore.current = board 
-    taskStore.getTasks(Number(board.id))
-    boardStore.connectToBoard(board.id)
+
 }
 
 </script>
@@ -44,20 +44,12 @@ h2{
     color: #32ba7c;
 }
 
-/* ------- BOARD ------- */
-.boardpage {  
-    width: 100%;  
-    height: 91.6vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;    
-    
-} 
-.board-container, .task-container, .info-container{
+/* ------- BOARD ------- */ 
+.info-container{
     background-color: #242424;
     height: 100%; 
 }
-.board-top{
+.info-top{
     background-color: #242424;
     padding: 0 1vw;
     border-bottom: 1px solid gray;
@@ -65,21 +57,20 @@ h2{
     width: 90%;
     position: sticky;
     top: 0;
+    margin-bottom: 1vh;
 }
-.board-top h2{
+.info-top h2{
     margin: 1vh 0;
 }
-.board-container{
+.info-container{
     width: 20%; 
     display: flex;
     flex-direction: column;
     overflow-y: scroll;
 }
 
-.board-card {
-    padding: 1.5vh 1.5vw;
-    background-color: #242424;
-    border: 1px solid #ccc;
+.member-card {
+    padding: 1.5vh 1.5vw; 
     border-radius: 8px; 
     margin: 1vh .5vw;
     height: 1vh;

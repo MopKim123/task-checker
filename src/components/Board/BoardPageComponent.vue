@@ -2,17 +2,15 @@
     <!-- Backdrop always rendered -->
     <div class="boardpage"> 
         <BoardContainer/>
-        <TaskContainer/>
-        <div class="info-container">
-
-            
-        </div>
+        <TaskContainer/>        
+        <InfoContainer/>
     </div>
 </template>
 
 
 <script lang="ts" setup> 
 import BoardContainer from './child/BoardContainer.vue';
+import InfoContainer from './child/InfoContainer.vue';
 import TaskContainer from './child/TaskContainer.vue'; 
 
 </script>
