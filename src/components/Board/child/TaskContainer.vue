@@ -2,7 +2,12 @@
     <!-- Backdrop always rendered --> 
     <div class="task-container">
         <div class="task-top">
-            <h2>{{ boardStore.current?.name }}</h2>
+            <div class="left">
+                <h2 v-show="!updateBoard">{{ boardStore.current?.name }}</h2>
+                <input v-show="updateBoard" v-model="newBoard.name" @keyup.enter="updateCurrentBoard" />
+            </div>
+
+            <img src="../../../assets/edit.png" class="icon" @click.stop="updateBoard = true" v-show="boardStore.current?.ownerId == userId"/>
         </div>
         <div class="tasks">
             <div 
@@ -66,7 +71,7 @@
 
 
 <script lang="ts" setup>
-import { ref } from 'vue';  
+import { ref, watch } from 'vue';  
 import { useBoardStore } from '../../../store/boards.store';
 import { useTaskStore } from '../../../store/tasks.store';
 import CreateTask from '../modal/CreateTask.vue';
@@ -74,16 +79,47 @@ import ViewTask from '../modal/ViewTask.vue';
 import type { TaskResponse } from '../../../types/task';
 import EditTask from '../modal/EditTask.vue';
 import DeleteTask from '../modal/DeleteTask.vue';
+import { useEventTypeStore } from '../../../store/eventType.store';
+import { sendEvent } from '../../../services/websocket';
+import type { BoardResponse } from '../../../types/board';
 
 const boardStore = useBoardStore() 
 const taskStore = useTaskStore() 
+const userId = Number(localStorage.getItem('userId'))
+const eventType = useEventTypeStore()
 
 const isCreateTaskVisible = ref(false)
 const isViewTaskVisible = ref(false)
 const isEditTaskVisible = ref(false)
 const isDeleteTaskVisible = ref(false)
+const updateBoard = ref(false) 
+const newBoard = ref<BoardResponse>({} as BoardResponse)
+watch(
+    () => boardStore.current,
+    (val) => {
+        if (val) newBoard.value = { ...val }
+    },
+    { immediate: true }
+)
 
 const selectedTask = ref<TaskResponse>({} as TaskResponse)
+
+
+function cancelAdding() {
+    updateBoard.value = false 
+}
+
+
+function updateCurrentBoard(){  
+
+    const type = eventType.BOARD_UPDATED
+    const boardId = boardStore.current.id
+    const data = {id: newBoard.value?.id, name: newBoard.value?.name}
+    const message = {type, boardId, data}
+    sendEvent(message) 
+    updateBoard.value = false 
+}
+
 
 function selectTask(task: TaskResponse){
     selectedTask.value = task ? task : {} as TaskResponse
@@ -126,6 +162,12 @@ h2{
     position: sticky;
     top: 0;
     display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.task-top img{
+    height: 3vh;
+    cursor: pointer;
 }
 .task-top h2{
     margin: 1vh 0;

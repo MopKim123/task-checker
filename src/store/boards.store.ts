@@ -36,10 +36,14 @@ export const useBoardStore = defineStore('board', {
         
         initBoardEvents() {
             onEvent("BOARD_UPDATED", (msg) => {
-                const updated = msg.payload;
+                const updated = msg.data;
+                console.log(updated)
                 const idx = this.boards.findIndex(b => b.id === updated.id);
 
-                if (idx !== -1) this.boards[idx] = updated;
+                if (idx !== -1) {
+                    this.boards[idx] = updated;
+                    this.current.name = updated.name
+                }
             });
 
             onEvent("BOARD_DELETED", (msg) => {

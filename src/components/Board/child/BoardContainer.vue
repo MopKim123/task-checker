@@ -28,6 +28,7 @@ onMounted( async() => {
 async function selectBoard(board: BoardResponse) {
     boardStore.current = board 
     taskStore.initTaskEvents();
+    boardStore.initBoardEvents()
     boardStore.connectToBoard(board.id)
 
     taskStore.getTasks(Number(board.id))
