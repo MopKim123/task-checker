@@ -97,6 +97,10 @@ textarea{
     max-width: 73%;
     min-width: 73%;
     margin: 1vh 0; 
+    font-size: .9rem;
+    min-height: 6vh;
+    border: 1px solid white;
+    border-radius: 5px;
 }
 h2{
     color: white;

@@ -12,12 +12,12 @@ export function connectWS(boardId: number) {
     socket = new WebSocket(`ws://localhost:8080/ws?boardId=${boardId}`);
 
     socket.onopen = () => {
+        console.log(`is open: ${boardId}`);
         openHandlers.forEach(h => h());
     };
 
     socket.onmessage = (ev) => {
-        const msg = JSON.parse(ev.data);
-        console.log("msg",msg)
+        const msg = JSON.parse(ev.data); 
         const type = msg.type;
 
         listeners[type]?.forEach(fn => fn(msg));

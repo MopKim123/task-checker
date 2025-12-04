@@ -9,19 +9,27 @@
                 class="task-card"
                 v-for="task in taskStore.tasks"
                 :key="task.id"
+                @click="selectTask(task)"
             >
+                
                 <div class="task-card-row">
                     <h3>{{ task.title }}</h3>
-                    <span class="status">{{ task.status }}</span>
+                    <span class="status" :class="task?.status === 'URGENT' ? 'urgent' : 'normal'">{{ task.status }}</span>
                 </div>
                 <p>{{ task.description }}</p>
-                <div class="task-card-row">
+                <div class="task-card-row bottom">
                     <p>Assigned to:</p>
                     <p><u>{{ task.assignedTo.username }}</u></p>
                 </div>
-                <div class="task-card-comment">
-                    <p>{{ taskStore.comments.filter(c => c.task.id == task.id).length }}</p>
-                    <img src="../../../assets/comment.png" class="icon" />
+                <div class="task-card-bottom">
+                    <div class="task-card-comment">
+                        <p>{{ taskStore.comments.filter(c => c.task?.id == task.id).length }}</p>
+                        <img src="../../../assets/comment.png" class="icon" />
+                    </div>
+                    <div class="task-btn">
+                        <img src="../../../assets/edit.png" class="icon" @click.stop="" title="Edit Task"/>
+                        <img src="../../../assets/bin.png" class="icon" @click.stop="" title="Delete Task"/>
+                    </div>
                 </div>
             </div>
             <div class="create-task-card" @click="isCreateTaskVisible = true" v-show="boardStore.current.id"> 
@@ -31,25 +39,40 @@
  
     </div> 
 
-    <CreateTask 
+    <CreateTask  
         :visible="isCreateTaskVisible"  
         @update=""
         @close="isCreateTaskVisible = false"
+    />
+    <ViewTask 
+        :selectedTask="selectedTask"  
+        :visible="isViewTaskVisible"  
+        @update=""
+        @close="isViewTaskVisible = false"
     />
 </template>
 
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue';  
+import { ref } from 'vue';  
 import { useBoardStore } from '../../../store/boards.store';
 import { useTaskStore } from '../../../store/tasks.store';
 import CreateTask from '../modal/CreateTask.vue';
+import ViewTask from '../modal/ViewTask.vue';
+import type { TaskResponse } from '../../../types/task';
 
 const boardStore = useBoardStore() 
 const taskStore = useTaskStore() 
 
 const isCreateTaskVisible = ref(false)
- 
+const isViewTaskVisible = ref(false)
+
+const selectedTask = ref<TaskResponse>()
+
+function selectTask(task: TaskResponse){
+    selectedTask.value = task
+    isViewTaskVisible.value = true
+}
 
 </script>
 
@@ -104,6 +127,21 @@ h2{
     align-items: center;
     justify-content: space-between;
 }
+.task-card-bottom {   
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+.task-btn{ 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5vw;
+}
+.bottom{
+    margin-top: auto;
+}
 .task-card-row h3{
     text-align: left; 
 }
@@ -111,10 +149,9 @@ h2{
     display: flex;
     flex-direction: row;
     align-items: center; 
-    justify-content: right;
-    margin-top: auto;
+    justify-content: right; 
 }
-.task-card-comment img{   
+.task-card-bottom img{   
     height: 1.3vw;
     margin-left: .3vw;
 }
@@ -122,12 +159,11 @@ h2{
     margin: 0;
     align-self: center;
     text-align: left;
-    font-size: .9rem;
+    font-size: .9rem; 
 }
 .task-card-row span{    
     padding: .5vh .5vw;
     border-radius: 8px;
-    border: 1px solid #444; 
 }
 .task-card h3 {
     margin: 0 0 0.5rem 0;
@@ -139,9 +175,17 @@ h2{
     text-align: left;
     font-size: .9rem;
 }
-.status {
-    font-size: 0.9rem;
+.task-card-row .status {
+    font-size: 0.8rem;
+    margin-bottom: auto;
+}
+.task-card-row .urgent{
+    color: #ff1515;
+    border: 1px solid #ff1515; 
+}
+.task-card-row .normal{ 
     color: #32ba7c;
+    border: 1px solid #32ba7c; 
 }
 
 .task-card:hover, .create-task-card:hover {

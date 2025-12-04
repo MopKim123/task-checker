@@ -1,0 +1,12 @@
+{ 
+    "id": 1, 
+    "message": "this is a task comment", 
+    "createdAt": "2025-12-02T15:05:41.680661", 
+    "task": { 
+        "id": 2
+    }, 
+    "author": { 
+        "id": 2, 
+        "username": "mopheadkim"
+    } 
+}

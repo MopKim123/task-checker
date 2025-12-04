@@ -12,7 +12,7 @@
 
 
 <script lang="ts" setup>
-import { onMounted, watch } from 'vue'; 
+import { onMounted } from 'vue'; 
 import { useBoardStore } from '../../../store/boards.store';
 import type { BoardResponse } from '../../../types/board';
 import { useTaskStore } from '../../../store/tasks.store';
@@ -24,18 +24,13 @@ onMounted( async() => {
     await boardStore.getBoards(Number(localStorage.getItem('userId')));
 }); 
 
-watch(
-    () => boardStore.current.id,
-    id => {
-        console.log("id",id) 
-    }
-)
 
 async function selectBoard(board: BoardResponse) {
     boardStore.current = board 
-    taskStore.getTasks(Number(board.id))
-    boardStore.connectToBoard(board.id)
     taskStore.initTaskEvents();
+    boardStore.connectToBoard(board.id)
+
+    taskStore.getTasks(Number(board.id))
 }
 
 </script>

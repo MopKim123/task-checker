@@ -45,6 +45,8 @@ export const useTaskStore = defineStore('task', {
         },  
 
         initTaskEvents() {
+            console.log("Task events initialized")
+
             onEvent("TASK_CREATED", (msg) => {
                 console.log("msg2",msg.data)
                 this.tasks.push(msg.data);
@@ -64,13 +66,8 @@ export const useTaskStore = defineStore('task', {
                 this.tasks = this.tasks.filter(t => t.id !== id);
             });
 
-            onEvent("COMMENT_ADDED", (msg) => {
-                const { taskId, comment } = msg.payload;
-
-                const task = this.tasks.find(t => t.id === taskId);
-                if (task) {
-                    this.comments.push(comment);
-                }
+            onEvent("COMMENT_ADDED", (msg) => {  
+                this.comments.push(msg.data);  
             });
 
             onEvent("MEMBER_ADDED", (msg) => {

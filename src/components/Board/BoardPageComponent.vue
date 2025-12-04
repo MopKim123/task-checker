@@ -29,8 +29,8 @@ h2{
     align-items: center;    
     
 } 
-.info-container{
-} 
+/* .info-container{
+}  */
 
 
 

@@ -18,6 +18,12 @@ export interface TaskRequest {
   assignedTo: User 
 } 
 
+export interface CommentRequest { 
+  taskId: number
+  message: string 
+  authorId: number 
+} 
+
 export interface CommentResponse { 
   id: number
   message: string 

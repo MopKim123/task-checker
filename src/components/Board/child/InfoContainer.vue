@@ -13,8 +13,7 @@
 
 <script lang="ts" setup>
 import { onMounted, watch } from 'vue'; 
-import { useBoardStore } from '../../../store/boards.store';
-import type { BoardResponse } from '../../../types/board';
+import { useBoardStore } from '../../../store/boards.store'; 
 import { useTaskStore } from '../../../store/tasks.store';
 
 const boardStore = useBoardStore()  
@@ -24,18 +23,13 @@ onMounted( async() => {
     await boardStore.getBoards(Number(localStorage.getItem('userId')));
 }); 
 
-watch(
-    () => boardStore.current.id,
-    id => {
-        console.log("id",id)
-        taskStore.getTasks(Number(id))
-    }
-)
-
-async function selectBoard(board: BoardResponse) {
-    boardStore.current = board 
-
-}
+// watch(
+//     () => boardStore.current.id,
+//     id => {
+//         console.log("id",id)
+//         taskStore.getTasks(Number(id))
+//     }
+// ) 
 
 </script>
 

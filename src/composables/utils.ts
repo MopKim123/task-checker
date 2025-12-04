@@ -1,0 +1,15 @@
+export function formatDate(dateString: string) {
+    const date = new Date(dateString);
+
+    const hours = date.getHours();
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+
+    const ampm = hours >= 12 ? "PM" : "AM";
+    const hour12 = (hours % 12 || 12).toString().padStart(2, "0");
+
+    const day = date.getDate().toString().padStart(2, "0");
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const year = date.getFullYear();
+
+    return `${hour12}:${minutes} ${ampm} ${month}/${day}/${year}`;
+}
