@@ -16,7 +16,7 @@
                 </option>
             </select> 
             <div class="buttons">
-                <button @click="update">Create</button>
+                <button @click="update">Update</button>
                 <button @click="close">Cancel</button>
             </div>
         </div>

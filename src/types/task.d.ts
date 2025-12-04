@@ -3,6 +3,9 @@ import type { User } from "./auth"
 export interface TaskSimpleResponse {
   id: number 
 } 
+export interface TaskSimpleRequest {
+  id: number 
+} 
 export interface TaskResponse {
   id: number
   title: string

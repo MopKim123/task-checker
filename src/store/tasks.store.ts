@@ -47,8 +47,7 @@ export const useTaskStore = defineStore('task', {
         initTaskEvents() {
             console.log("Task events initialized")
 
-            onEvent("TASK_CREATED", (msg) => {
-                console.log("msg2",msg.data)
+            onEvent("TASK_CREATED", (msg) => { 
                 this.tasks.push(msg.data);
             });
 
@@ -62,8 +61,8 @@ export const useTaskStore = defineStore('task', {
             });
 
             onEvent("TASK_DELETED", (msg) => {
-                const id = msg.payload;
-                this.tasks = this.tasks.filter(t => t.id !== id);
+                const id = msg.data.id;  
+                this.tasks = this.tasks.filter(t => t.id !== id); 
             });
 
             onEvent("COMMENT_ADDED", (msg) => {  

@@ -3,29 +3,11 @@
     <div class="modal-backdrop" :class="{ 'show': visible }" @click.self="close">
         <transition name="slide">
         <div class="modal" v-if="visible">
-            <h2>Create Task</h2> 
-            <input v-model="newTask.title" placeholder="Title" required/> 
-            <textarea v-model="newTask.description" name="" id="" required></textarea> 
-            <select v-model="newTask.status" required>
-                <option value="" disabled>Select Status</option>
-                <option 
-                    v-for="status in taskStore.status" 
-                    :key="status" 
-                    :value="status">
-                    {{ status }} 
-                </option>
-            </select>
-            <select v-model="newTask.assignedTo" required>
-                <option value="" disabled>Assign to</option>
-                <option 
-                    v-for="member in taskStore.members" 
-                    :key="member.id" 
-                    :value="member.id">
-                    {{ member.user.username }} 
-                </option>
-            </select> 
+            <h2>Delete Task</h2> 
+            <p>Are you sure you want to delete this task?</p>
+            <p>Title: <b>{{ selectedTask.title }}</b></p>
             <div class="buttons">
-                <button @click="create">Create</button>
+                <button @click="deleteTask" class="delete">Delete</button>
                 <button @click="close">Cancel</button>
             </div>
         </div>
@@ -35,38 +17,38 @@
 
 
 <script lang="ts" setup>
-import { defineProps, defineEmits, ref} from 'vue'  
-import { useTaskStore } from '../../../store/tasks.store'; 
-import type { TaskRequest } from '../../../types/task';
+import { defineProps, defineEmits } from 'vue'  
+import type { TaskResponse } from '../../../types/task';
 import { useEventTypeStore } from '../../../store/eventType.store';
 import { sendEvent } from '../../../services/websocket';
 import { useBoardStore } from '../../../store/boards.store';
 
-defineProps<{  
+const props = defineProps<{  
+    selectedTask: TaskResponse 
     visible: boolean 
-}>()
+}>() 
+
+
 
 const emit = defineEmits<{ 
     (e: 'close'): void
 }>()
 
-const taskStore = useTaskStore()
 const boardStore = useBoardStore()
-const eventType = useEventTypeStore()
-const newTask = ref({} as TaskRequest)
+const eventType = useEventTypeStore() 
 
 
 function close() {
     emit('close')
 } 
 
-function create() {
-    const type = eventType.TASK_CREATED
+function deleteTask() {
+    const type = eventType.TASK_DELETED
     const boardId = boardStore.current.id
-    const data = newTask.value
-    const message = {type, boardId, data}
+    const data = {id: props.selectedTask.id}
+    const message = {type, boardId, data} 
+    console.log(message)
     sendEvent(message) 
-    newTask.value = {} as TaskRequest
     emit('close')
 } 
 </script>
@@ -117,13 +99,14 @@ h4{
 .buttons{ 
     display: flex;
     justify-content: space-around;
-    margin-top: 1vh;
+    margin-top: 3vh;
 }
 
 button{
     background-color: #242424; 
     color: rgb(255, 255, 255);
     border: 1px solid white;
+    padding: 1.3vh 1.3vw;
 }
 button:hover{
     background-color: #444444; 
@@ -131,29 +114,33 @@ button:hover{
 button:active{
     background-color: #242424; 
 }
+.delete{
+    color: red;
+    border: 1px solid red;
+}
 
 .modal-backdrop {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(124, 124, 124, 0.5);
-  backdrop-filter: blur(5px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-  z-index: 100;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(124, 124, 124, 0.5);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 100;
 }
 
 .modal-backdrop.show {
-  opacity: 1;
-  pointer-events: all;
+    opacity: 1;
+    pointer-events: all;
 }
 
 /* Slide animation for modal */
 .slide-enter-active, .slide-leave-active {
-  transition: all 0.3s ease;
+    transition: all 0.3s ease;
 }
 .slide-enter-from { opacity: 0; transform: translateY(-10%); }
 .slide-enter-to { opacity: 1; transform: translateY(0); }
