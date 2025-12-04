@@ -9,9 +9,27 @@
 
 
 <script lang="ts" setup> 
+import { onMounted } from 'vue';
 import BoardContainer from './child/BoardContainer.vue';
 import InfoContainer from './child/InfoContainer.vue';
 import TaskContainer from './child/TaskContainer.vue'; 
+import { useAuthStore } from '../../store/auth.store';
+
+const authStore = useAuthStore()
+
+onMounted( async() => {
+    authStore.connectToUser()
+}); 
+
+
+// async function selectBoard(board: BoardResponse) {
+//     boardStore.current = board 
+//     taskStore.initTaskEvents();
+//     boardStore.initBoardEvents()
+//     boardStore.connectToBoard(board.id)
+
+//     taskStore.getTasks(Number(board.id))
+// }
 
 </script>
 

@@ -35,6 +35,12 @@ export const useBoardStore = defineStore('board', {
 
         
         initBoardEvents() {
+            
+            onEvent("BOARD_CREATED", (msg) => {  
+                this.boards.push(msg.data);  
+                console.log(this.boards)
+            });
+
             onEvent("BOARD_UPDATED", (msg) => {
                 const updated = msg.data;
                 console.log(updated)
@@ -47,10 +53,10 @@ export const useBoardStore = defineStore('board', {
             });
 
             onEvent("BOARD_DELETED", (msg) => {
-                const id = msg.payload;
+                console.log("BOARD_DELETED",this.boards)
+                const id = msg.data;
                 this.boards = this.boards.filter(b => b.id !== id);
-            });
-
+            }); 
         }
     }
 })

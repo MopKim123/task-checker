@@ -13,12 +13,5 @@ export const useEventTypeStore = defineStore('eventType', {
         TASK_DELETED: "TASK_DELETED",
 
         COMMENT_ADDED: "COMMENT_ADDED",
-    }),
-    
-        actions: { 
-            // mapPayload(type: string, boardId: number, payload: any): WsEvent {
-                
-            //     return {type,boardId,payload} as WsEvent
-            // },   
-        }
+    }), 
 })

@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia' 
 import { loginUser } from '../services/auth'
 import type { LoginRequest, LoginResponse } from '../types/auth'
+import { connectWS, onOpen } from '../services/websocket'
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({
@@ -25,5 +26,12 @@ export const useAuthStore = defineStore('auth', {
                 // toast.error(`User not found! ${err}`) 
             }
         },  
+        connectToUser() {
+            connectWS(0);
+
+            onOpen(() => { 
+                console.log(`WS connected: user side`);
+            });
+        },
     }
 })

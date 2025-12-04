@@ -63,7 +63,8 @@ function close() {
 function create() {
     const type = eventType.TASK_CREATED
     const boardId = boardStore.current.id
-    const data = newTask.value
+    const value = newTask.value
+    const data = {title: value.title, description: value.description, status: value.status, assignedTo: value.assignedTo.id}
     const message = {type, boardId, data}
     sendEvent(message) 
     newTask.value = {} as TaskRequest

@@ -9,7 +9,8 @@ const listeners: Record<string, Listener[]> = {};
 let openHandlers: Array<() => void> = [];
 
 export function connectWS(boardId: number) {
-    socket = new WebSocket(`ws://localhost:8080/ws?boardId=${boardId}`);
+    const userId = localStorage.getItem('userId')
+    socket = new WebSocket(`ws://localhost:8080/ws?boardId=${boardId}&userId=${userId}`);
 
     socket.onopen = () => { 
         openHandlers.forEach(h => h());
@@ -17,9 +18,14 @@ export function connectWS(boardId: number) {
 
     socket.onmessage = (ev) => {
         const msg = JSON.parse(ev.data); 
+        console.log("Received msg:", msg, "type:", msg.type);
+        
         const type = msg.type;
-
-        listeners[type]?.forEach(fn => fn(msg));
+        if (!listeners[type] || listeners[type].length === 0) {
+            console.warn(`No listener for type "${type}"`, listeners);
+        } else {
+            listeners[type].forEach(fn => fn(msg));
+        }
     };
 }
 
