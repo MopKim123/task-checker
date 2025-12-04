@@ -11,3 +11,7 @@ export interface LoginResponse {
   id: number
   username: string
 }
+export interface AuthResponse {
+  id: number
+  username: string
+}

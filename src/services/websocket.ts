@@ -11,8 +11,7 @@ let openHandlers: Array<() => void> = [];
 export function connectWS(boardId: number) {
     socket = new WebSocket(`ws://localhost:8080/ws?boardId=${boardId}`);
 
-    socket.onopen = () => {
-        console.log(`is open: ${boardId}`);
+    socket.onopen = () => { 
         openHandlers.forEach(h => h());
     };
 

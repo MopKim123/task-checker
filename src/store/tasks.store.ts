@@ -44,8 +44,7 @@ export const useTaskStore = defineStore('task', {
             }
         },  
 
-        initTaskEvents() {
-            console.log("Task events initialized")
+        initTaskEvents() { 
 
             onEvent("TASK_CREATED", (msg) => { 
                 this.tasks.push(msg.data);
@@ -70,8 +69,9 @@ export const useTaskStore = defineStore('task', {
             });
 
             onEvent("MEMBER_ADDED", (msg) => {
-                const { boardId, member } = msg.payload;
+                const member = msg.data;
                 this.members.push(member);
+                console.log(this.members)
             });
         }
     }
