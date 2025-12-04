@@ -27,7 +27,7 @@
                         <img src="../../../assets/comment.png" class="icon" />
                     </div>
                     <div class="task-btn">
-                        <img src="../../../assets/edit.png" class="icon" @click.stop="" title="Edit Task"/>
+                        <img src="../../../assets/edit.png" class="icon" @click.stop="editTask(task)" title="Edit Task"/>
                         <img src="../../../assets/bin.png" class="icon" @click.stop="" title="Delete Task"/>
                     </div>
                 </div>
@@ -50,6 +50,12 @@
         @update=""
         @close="isViewTaskVisible = false"
     />
+    <EditTask 
+        :selectedTask="selectedTask"  
+        :visible="isEditTaskVisible"  
+        @update=""
+        @close="isEditTaskVisible = false"
+    />
 </template>
 
 
@@ -60,18 +66,25 @@ import { useTaskStore } from '../../../store/tasks.store';
 import CreateTask from '../modal/CreateTask.vue';
 import ViewTask from '../modal/ViewTask.vue';
 import type { TaskResponse } from '../../../types/task';
+import EditTask from '../modal/EditTask.vue';
 
 const boardStore = useBoardStore() 
 const taskStore = useTaskStore() 
 
 const isCreateTaskVisible = ref(false)
 const isViewTaskVisible = ref(false)
+const isEditTaskVisible = ref(false)
 
-const selectedTask = ref<TaskResponse>()
+const selectedTask = ref<TaskResponse>({} as TaskResponse)
 
 function selectTask(task: TaskResponse){
-    selectedTask.value = task
+    selectedTask.value = task ? task : {} as TaskResponse
     isViewTaskVisible.value = true
+}
+
+function editTask(task: TaskResponse){
+    selectedTask.value = task
+    isEditTaskVisible.value = true
 }
 
 </script>

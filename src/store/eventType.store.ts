@@ -1,5 +1,4 @@
-import { defineStore } from 'pinia'  
-import type { WsEvent } from '../types/websocket'
+import { defineStore } from 'pinia'   
 
 export const useEventTypeStore = defineStore('eventType', {
     state: () => ({ 

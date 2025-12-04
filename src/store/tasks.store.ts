@@ -53,8 +53,8 @@ export const useTaskStore = defineStore('task', {
             });
 
             onEvent("TASK_UPDATED", (msg) => {
-                const updated = msg.payload;
-                const idx = this.tasks.findIndex(t => t.id === updated.id);
+                const updated = msg.data;
+                const idx = this.tasks.findIndex(t => t.id === updated.id); 
 
                 if (idx !== -1) {
                     this.tasks[idx] = updated;

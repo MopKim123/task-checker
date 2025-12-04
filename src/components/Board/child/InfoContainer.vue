@@ -12,7 +12,7 @@
 
 
 <script lang="ts" setup>
-import { onMounted, watch } from 'vue'; 
+import { onMounted } from 'vue'; 
 import { useBoardStore } from '../../../store/boards.store'; 
 import { useTaskStore } from '../../../store/tasks.store';
 

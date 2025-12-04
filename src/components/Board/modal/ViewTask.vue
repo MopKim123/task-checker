@@ -4,7 +4,7 @@
         <transition name="slide">
         <div class="modal" v-if="visible">
             <div class="modal-top">
-                <h2>{{ selectedTask?.title }}{{ selectedTask?.title }}{{ selectedTask?.title }}</h2> 
+                <h2>{{ selectedTask?.title }}</h2> 
                 <span class="status" :class="selectedTask?.status === 'URGENT' ? 'urgent' : 'normal'">{{ selectedTask?.status }}</span>
             </div>
             <div class="description">

@@ -3,10 +3,10 @@
     <div class="modal-backdrop" :class="{ 'show': visible }" @click.self="close">
         <transition name="slide">
         <div class="modal" v-if="visible">
-            <h2>Create Task</h2> 
-            <input v-model="newTask.title" placeholder="Title" required/> 
-            <textarea v-model="newTask.description" name="" id="" required></textarea> 
-            <select v-model="newTask.status" required>
+            <h2>Edit Task</h2> 
+            <input v-model="localTask.title" placeholder="Title" required/> 
+            <textarea v-model="localTask.description" name="" id="" required></textarea> 
+            <select v-model="localTask.status" required>
                 <option value="" disabled>Select Status</option>
                 <option 
                     v-for="status in taskStore.status" 
@@ -14,18 +14,9 @@
                     :value="status">
                     {{ status }} 
                 </option>
-            </select>
-            <select v-model="newTask.assignedTo" required>
-                <option value="" disabled>Assign to</option>
-                <option 
-                    v-for="member in taskStore.members" 
-                    :key="member.id" 
-                    :value="member.id">
-                    {{ member.user.username }} 
-                </option>
             </select> 
             <div class="buttons">
-                <button @click="create">Create</button>
+                <button @click="update">Create</button>
                 <button @click="close">Cancel</button>
             </div>
         </div>
@@ -35,16 +26,41 @@
 
 
 <script lang="ts" setup>
-import { defineProps, defineEmits, ref} from 'vue'  
+import { defineProps, defineEmits, ref, watch} from 'vue'  
 import { useTaskStore } from '../../../store/tasks.store'; 
-import type { TaskRequest } from '../../../types/task';
+import type { TaskEditRequest, TaskResponse } from '../../../types/task';
 import { useEventTypeStore } from '../../../store/eventType.store';
 import { sendEvent } from '../../../services/websocket';
 import { useBoardStore } from '../../../store/boards.store';
 
-defineProps<{  
+const props = defineProps<{  
+    selectedTask: TaskResponse 
     visible: boolean 
 }>()
+
+const localTask = ref<TaskEditRequest>({
+    id: props.selectedTask.id,
+    title: props.selectedTask.title,
+    status: props.selectedTask.status,
+    description: props.selectedTask.description,
+    assignedTo: props.selectedTask.assignedTo?.id // number, not User
+});
+watch(
+    () => props.selectedTask,
+    (newTask) => {
+        if (!newTask) return;
+        localTask.value = {
+            id: newTask.id,
+            title: newTask.title,
+            status: newTask.status,
+            description: newTask.description,
+            assignedTo: newTask.assignedTo?.id
+        };
+    },
+    { immediate: true }
+);
+
+
 
 const emit = defineEmits<{ 
     (e: 'close'): void
@@ -52,19 +68,18 @@ const emit = defineEmits<{
 
 const taskStore = useTaskStore()
 const boardStore = useBoardStore()
-const eventType = useEventTypeStore()
-const newTask = ref({} as TaskRequest)
+const eventType = useEventTypeStore() 
 
 
 function close() {
     emit('close')
 } 
 
-function create() {
-    const type = eventType.TASK_CREATED
+function update() {
+    const type = eventType.TASK_UPDATED
     const boardId = boardStore.current.id
-    const data = newTask.value
-    const message = {type, boardId, data}
+    const data = localTask.value
+    const message = {type, boardId, data} 
     sendEvent(message) 
     emit('close')
 } 
