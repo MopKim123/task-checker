@@ -1,18 +1,33 @@
+import axios from "axios"
 import type { LoginRequest, LoginResponse } from "../types/auth"
 
 const API_BASE_URL = import.meta.env.VITE_API_URL
 
-export async function loginUser(user: LoginRequest): Promise<LoginResponse> { 
-    const res = await fetch(`${API_BASE_URL}/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(user),
-        credentials: "include",
-    })
-    
-    if (!res.ok) throw new Error("Login failed")
-    const json = await res.json()  
+export async function loginUser(user: LoginRequest): Promise<LoginResponse> {
+    try {
+        const res = await axios.post<LoginResponse>(
+            `${API_BASE_URL}/auth/login`,
+            user,
+            {
+                withCredentials: true, 
+            }
+        )
+        return res.data
+    } catch (error: any) {
+        throw new Error(error.response?.data?.message || "Login failed")
+    }
+}
 
-
-    return json
+export async function registerUser(user: LoginRequest): Promise<void> {
+    try {
+        await axios.post<LoginResponse>(
+            `${API_BASE_URL}/auth/register`,
+            user,
+            {
+                withCredentials: true, 
+            }
+        ) 
+    } catch (error: any) {
+        throw new Error(error.response?.data?.message || "Register failed")
+    }
 }

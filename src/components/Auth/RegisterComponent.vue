@@ -2,12 +2,12 @@
     <!-- Backdrop always rendered -->
     <div class="modal-backdrop show"> 
         <div class="modal">
-            <h2>Login</h2>
+            <h2>Register</h2>
             <input v-model="request.username" placeholder="Username..." required/>
             <input v-model="request.password" type="password" placeholder="Password..." required/> 
-            <span>No account yet? <b @click="register">Register</b></span>
             <div class="buttons">
-                <button @click="login">Login</button> 
+                <button @click="router.push('/')">Login</button> 
+                <button @click="register">Signup</button> 
             </div>
         </div> 
     </div>
@@ -16,29 +16,18 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'  
-import type { LoginRequest } from '../../types/auth'
-import { useAuthStore } from '../../store/auth.store'
-import router from '../../router'
-  
+import type { LoginRequest } from '../../types/auth' 
+import router from '../../router' 
+import { registerUser } from '../../services/auth'
 
-const request = ref({} as LoginRequest) 
-
-async function login() {  
-    const authStore = useAuthStore() 
-
-    try { 
-        await authStore.login(request.value)
-        // toast.success("Student updated successfully!",)
-        request.value = {} as LoginRequest 
-        router.push('/home')
-    } catch (error) { 
-        alert(error)
-        // toast.error("Something went wrong!")
-    } 
-}
+const request = ref({} as LoginRequest)  
 
 function register() { 
-    router.push("/register")
+    const value = request.value
+    if(value.password && value.username){
+        registerUser(value)
+        router.push('/')
+    }
 } 
 </script>
 
